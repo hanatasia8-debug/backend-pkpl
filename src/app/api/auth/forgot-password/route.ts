@@ -9,27 +9,27 @@ export async function POST(request: Request) {
     const clientIp =
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       "unknown-client";
-    const limitCheck = checkRateLimit(`register:${clientIp}`, 5, 60 * 1000);
+    const limitCheck = checkRateLimit(`password-recovery:${clientIp}`, 3, 60 * 1000);
     if (!limitCheck.allowed) {
       return ApiResponse.error(
-        `Terlalu banyak percobaan registrasi. Coba lagi dalam ${limitCheck.retryAfterSeconds} detik.`,
+        `Terlalu banyak permintaan reset. Coba lagi dalam ${limitCheck.retryAfterSeconds} detik.`,
         429,
       );
     }
 
     const body = await request.json();
     const origin = getAllowedFrontendOrigin(request);
-    const emailRedirectTo = new URL(
-      "/api/auth/callback?next=%2Fadmin%2Flogin",
+    const redirectTo = new URL(
+      "/api/auth/callback?next=%2Fadmin%2Freset-password",
       origin,
     ).toString();
-    const user = await AuthService.signUp(body, emailRedirectTo);
-    return ApiResponse.success(user, "Registrasi akun berhasil", 201);
-  } catch (error: unknown) {
+    const result = await AuthService.requestPasswordRecovery(body, redirectTo);
+    return ApiResponse.success(result, result.message);
+  } catch (error) {
     if (error instanceof AppError) {
       return ApiResponse.error(error.message, error.statusCode, error.errors);
     }
-    console.error("Gagal memproses registrasi:", error);
-    return ApiResponse.error("Terjadi kesalahan saat registrasi", 500);
+    console.error("Gagal meminta pemulihan kata sandi:", error);
+    return ApiResponse.error("Terjadi kesalahan saat meminta pemulihan kata sandi", 500);
   }
 }

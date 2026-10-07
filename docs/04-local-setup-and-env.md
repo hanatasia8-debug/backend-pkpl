@@ -100,7 +100,12 @@ npx prisma studio
 * **Penyebab**: Prisma Client belum di-generate ulang setelah `schema.prisma` diubah.
 * **Solusi**: Jalankan perintah `npx prisma generate` lalu restart terminal.
 
-### 3. `Port 3000 is already in use`
+### 3. `violates foreign key constraint "user role fk"` saat membuat akun Supabase
+* **Penyebab**: Trigger Supabase Auth memasukkan pengguna ke tabel `users`, tetapi ID role yang dirujuk tidak ada di tabel `roles`.
+* **Solusi**: Pastikan mapping role tetap `ADMIN` ID `1` dan `USER` ID `2`. Jalankan `npm run db:seed:dev-admin` hanya pada project non-production dengan variabel konfirmasi yang diwajibkan skrip. Skrip memastikan kedua role tersedia sebelum membuat pengguna Auth dan berhenti jika mapping role yang sudah ada bertentangan.
+* **Catatan**: `25P02` / “current transaction is aborted” adalah error lanjutan setelah insert awal gagal; periksa pelanggaran foreign key `23503` sebagai penyebab pertama.
+
+### 4. `Port 3000 is already in use`
 * **Penyebab**: Terdapat proses Node.js lain yang masih berjalan di port 3000.
 * **Solusi**: Hentikan proses lama dengan perintah:
   ```bash

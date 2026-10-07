@@ -152,6 +152,7 @@ Aplikasi membutuhkan environment variables berikut:
 | `NODE_ENV` | Mode lingkungan aplikasi | `development` / `production` |
 | `FRONTEND_URL` | Origin domain frontend yang diizinkan CORS | `http://localhost:3001` / `https://desa.vercel.app` |
 | `NEXT_PUBLIC_SUPABASE_URL` | URL project Supabase | `https://xxxx.supabase.co` |
+| `SUPABASE_ANON_KEY` | Alias server-only untuk Public Anon Key jika nama variabel di atas tidak digunakan | Public key dari project Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public Anon Key Supabase | `eyJhbGciOiJIUzI1NiIsIn...` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Service Role Key Supabase (Admin backend) | `eyJhbGciOiJIUzI1NiIsIn...` |
 | `SUPABASE_STORAGE_BUCKET_UMKM` | Nama bucket storage untuk UMKM | `umkm` |
@@ -199,8 +200,13 @@ Aplikasi membutuhkan environment variables berikut:
 
 #### 🔑 Authentication (`/api/auth`)
 * `POST /api/auth/login` : Autentikasi admin, menghasilkan sesi dan access token.
+* `POST /api/auth/register` : Membuat akun biasa; role admin hanya diberikan setelah persetujuan.
+* `POST /api/auth/forgot-password` dan `POST /api/auth/update-password` : Meminta email reset dan menyimpan kata sandi baru.
+* `GET /api/admin/users` dan `PATCH /api/admin/users/[id]/approve` : Daftar dan setujui pendaftar admin oleh admin yang sudah terautentikasi.
 * `GET /api/auth/me` : Memeriksa profil dan hak akses admin yang sedang aktif.
 * `POST /api/auth/logout` : Menghapus sesi autentikasi admin.
+
+Untuk uji lokal saja, siapkan Supabase dan database development (jangan gunakan project hosting resmi), lalu jalankan `NODE_ENV=development DEV_ADMIN_SEED_CONFIRM=LOCAL_ONLY npm run db:seed:dev-admin`. Kredensial default lokal adalah username `Admin` dan password `Admin123`; keduanya tidak digunakan oleh production. Backend memerlukan `NEXT_PUBLIC_SUPABASE_ANON_KEY` (atau `SUPABASE_ANON_KEY`) untuk registrasi dan reset password. Tambahkan URL callback `http://localhost:3001/api/auth/callback` ke daftar redirect URL Supabase.
 
 #### 🏪 Direktori UMKM Publik (`/api/public/umkm`)
 * `GET /api/public/umkm` : Mengambil daftar UMKM terbit (*pagination, filter kategori, search*).
