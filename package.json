@@ -7,13 +7,15 @@
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p 3000",
     "lint": "eslint",
+    "postinstall": "prisma generate",
+    "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:seed": "node prisma/seed.js",
+    "db:seed": "prisma db seed",
     "db:seed:dev-admin": "node scripts/seed-dev-admin.mjs",
-    "db:setup": "prisma db push && node prisma/seed.js"
+    "db:setup": "prisma generate && prisma db push && prisma db seed"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.1.1",

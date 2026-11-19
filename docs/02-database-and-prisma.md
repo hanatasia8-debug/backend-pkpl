@@ -183,6 +183,6 @@ export const prisma = new PrismaClient({ adapter });
 | :--- | :--- |
 | `npx prisma generate` | Melakukan *generate* ulang Prisma Client TypeScript berdasarkan file `schema.prisma`. |
 | `npx prisma db push` | Menyinkronkan perubahan skema `schema.prisma` langsung ke basis data tanpa membuat berkas migrasi fisik (ideal untuk dev). |
-| `npx prisma db seed` | Menjalankan skrip pengisian data awal (*master data & sample seed*) dari `prisma/seed.ts`. |
+| `npx prisma db seed` | Menjalankan skrip pengisian data awal (*master data & sample seed*) dari `prisma/seed.mjs`. |
 | `npx prisma studio` | Membuka antarmuka grafis browser lokal untuk melihat dan mengedit isi basis data secara langsung. |
 | `npx prisma format` | Merapikan format indentasi dan validasi sintaks file `schema.prisma`. |

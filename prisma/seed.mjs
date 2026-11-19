@@ -1,7 +1,8 @@
 import "dotenv/config";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client";
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
 import { createClient } from "@supabase/supabase-js";
 
 const connectionString = process.env.DATABASE_URL;
@@ -27,7 +28,7 @@ async function main() {
   });
 
   const adminEmail = process.env.SEED_ADMIN_EMAIL || "admin@pringgodani.desa.id";
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "@AdminPringgodani142";
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || "admin123";
   let adminUuid = "00000000-0000-0000-0000-000000000001";
 
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -332,4 +333,5 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
+    await pool.end();
   });

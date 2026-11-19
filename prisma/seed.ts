@@ -1,14 +1,10 @@
-import { prisma } from "../src/shared/db/client";
-
-async function main() {
-  console.log("🌱 TypeScript seed runner synced.");
-}
-
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+/**
+ * Prisma Seed Entrypoint
+ * The primary database seeding script is located in `prisma/seed.mjs`
+ * and configured via `prisma.config.ts`.
+ *
+ * Usage:
+ *   npx prisma db seed
+ *   npm run db:seed
+ */
+import "./seed.mjs";
